@@ -69,6 +69,13 @@
         .risk-section { background-color: #fff1f2; border: 1px solid #fda4af; padding: 1.5rem; border-radius: 0.5rem; margin-top: 2rem; }
         .risk-section h2 { border-left-color: #e11d48; background-color: #ffe4e6; color: #9f1239; }
 
+        /* Agent Skill (Terminal Style) */
+        .skill-section { background-color: #0f172a; border: 1px solid #1e293b; padding: 1.5rem; border-radius: 0.5rem; margin-top: 2rem; color: #e2e8f0; }
+        .skill-section h2 { border-left-color: #3b82f6; background-color: transparent; color: #60a5fa; margin-top: 0; padding-top: 0;}
+        .skill-section h3 { color: #93c5fd; border-bottom: 1px dotted #334155; }
+        .skill-section p, .skill-section li { color: #cbd5e1; }
+        .skill-section strong { background-color: #1e293b; color: #38bdf8; padding: 0 4px; border-radius: 2px;}
+
         /* 解除 Mermaid 圖表寬度限制，防止文字擠壓重疊 */
         .mermaid { overflow-x: auto; width: 100%; display: flex; justify-content: flex-start; }
         .mermaid svg { max-width: none !important; min-width: 100%; height: auto; }
@@ -195,7 +202,6 @@
                     <button onclick="clearHistory()" class="text-xs text-red-400 hover:text-red-600 transition-colors">清空</button>
                 </div>
                 <div id="historyList" class="flex-1 overflow-y-auto p-2 space-y-2">
-                    <!-- History Items will be injected here -->
                     <div class="text-center text-xs text-slate-400 mt-4">尚無歷史紀錄</div>
                 </div>
             </div>
@@ -212,13 +218,17 @@
                     </h2>
                     
                     <!-- AI Tools -->
-                    <div class="flex gap-2 items-center pl-4 border-l border-slate-300">
+                    <div class="flex gap-2 items-center pl-4 border-l border-slate-300 flex-wrap">
                          <button id="btnRisk" onclick="generateRiskAssessment()" disabled 
-                            class="bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 px-3 py-1.5 rounded text-xs transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:border-slate-200 disabled:text-slate-400">
+                            class="bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 px-3 py-1.5 rounded text-xs transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fas fa-shield-alt"></i> 風險雷達
                          </button>
+                         <button id="btnSkill" onclick="generateAgentSkill()" disabled 
+                            class="bg-white border border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 px-3 py-1.5 rounded text-xs transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i class="fas fa-robot"></i> 產出 Agent Skill
+                         </button>
                          <button id="btnAudio" onclick="generateAudioBriefing()" disabled 
-                            class="bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 px-3 py-1.5 rounded text-xs transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:border-slate-200 disabled:text-slate-400">
+                            class="bg-white border border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 px-3 py-1.5 rounded text-xs transition-all shadow-sm flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fas fa-headphones"></i> 顧問導讀
                          </button>
                     </div>
@@ -237,20 +247,17 @@
             <!-- Content Area -->
             <div id="blueprintContainer" class="bg-white shadow-lg rounded-lg min-h-[800px] p-10 flex-1 blueprint-container relative">
                 
-                <!-- Welcome Screen -->
                 <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-slate-400 mt-20">
                     <i class="fas fa-robot text-6xl mb-4 text-slate-200"></i>
                     <p class="text-lg">請在左側輸入情境並點擊「生成藍圖」</p>
                     <p class="text-sm mt-2">系統將為您產出顧問級人機協作企劃</p>
                 </div>
 
-                <!-- Loading State -->
                 <div id="loadingState" class="hidden absolute inset-0 bg-white/90 z-20 flex flex-col items-center justify-center">
                     <div class="loader mb-4"></div>
                     <p id="loadingText" class="text-slate-600 font-medium animate-pulse">正在調用 Gemini AI 顧問大腦...</p>
                 </div>
 
-                <!-- Audio Player -->
                 <div id="audioPlayerContainer" class="hidden absolute top-4 right-4 z-30 max-w-xs">
                      <div class="audio-player-container">
                         <div class="flex items-center gap-2">
@@ -268,7 +275,6 @@
                      </div>
                 </div>
 
-                <!-- Actual Output -->
                 <div id="blueprintOutput" class="blueprint-content hidden"></div>
             </div>
             
@@ -278,7 +284,6 @@
         </main>
 
         <aside class="w-1/4 bg-white border-l border-slate-200 flex flex-col h-full overflow-hidden no-print">
-            <!-- Creator Card -->
             <div class="p-4 border-b border-slate-200 bg-slate-50">
                 <div class="flex items-start gap-3">
                     <img src="https://i.postimg.cc/Gh8Zt7SX/S_56844323.jpg" alt="Creator" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" onerror="this.src='https://placehold.co/48x48/334155/ffffff?text=Tony'">
@@ -292,7 +297,6 @@
                 </div>
             </div>
 
-            <!-- Chat Bot -->
             <div class="flex-1 flex flex-col overflow-hidden bg-white">
                 <div class="p-3 bg-slate-700 text-white flex justify-between items-center">
                     <span class="text-sm font-medium"><i class="fas fa-comments mr-2"></i>助理顧問 Bot</span>
@@ -333,7 +337,6 @@
                 <button onclick="closeMethodology()" class="text-slate-400 hover:text-slate-600 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-200"><i class="fas fa-times text-lg"></i></button>
             </div>
             <div class="p-8 overflow-y-auto blueprint-content bg-white flex-1" id="methodologyContent">
-                <!-- Content injected here via JS -->
             </div>
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end flex-shrink-0">
                 <button onclick="closeMethodology()" class="px-5 py-2 bg-slate-700 text-white rounded text-sm hover:bg-slate-800 transition-colors font-medium shadow-sm">關閉解析</button>
@@ -352,10 +355,8 @@
                 <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-6 text-slate-600 text-sm leading-relaxed" id="modalMessage">
-                <!-- Message -->
             </div>
             <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-2" id="modalActions">
-                <!-- Buttons -->
             </div>
         </div>
     </div>
@@ -475,7 +476,9 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
             apiKey: sessionStorage.getItem('GEMINI_API_KEY') || '',
             history: [],
             chatHistory: [],
-            currentBlueprintRaw: ''
+            currentBlueprintRaw: '',
+            currentSkillMdRaw: '',
+            currentSkillName: ''
         };
 
         // --- Firebase Init ---
@@ -494,7 +497,6 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
 
         // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化 Mermaid：關閉 gantt 與 flowchart 的 useMaxWidth，讓圖表能以原始比例渲染防擠壓
             mermaid.initialize({ 
                 startOnLoad: false, 
                 theme: 'neutral', 
@@ -538,17 +540,13 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
         }
 
         function toggleAiTools(enabled) {
-            const btnRisk = document.getElementById('btnRisk');
-            const btnAudio = document.getElementById('btnAudio');
-            btnRisk.disabled = !enabled;
-            btnAudio.disabled = !enabled;
+            document.getElementById('btnRisk').disabled = !enabled;
+            document.getElementById('btnSkill').disabled = !enabled;
+            document.getElementById('btnAudio').disabled = !enabled;
         }
 
         async function generateBlueprint() {
-            if (!state.apiKey) { 
-                showModal('需要驗證', '請先在右上角輸入 Google Gemini API Key 才能使用 AI 功能。', 'error');
-                return; 
-            }
+            if (!state.apiKey) { showModal('需要驗證', '請先在右上角輸入 Google Gemini API Key 才能使用 AI 功能。', 'error'); return; }
 
             const industry = document.getElementById('industry').value.trim();
             const painPoints = document.getElementById('painPoints').value.trim();
@@ -561,7 +559,6 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
 
             setLoading(true, '分析情境 -> 繪製關聯圖表 -> 產出藍圖...');
             
-            // 強制修正 Mermaid 語法產生品質，避免 Syntax Error
             const prompt = `
                 角色：你是一位擁有20年經驗的資深數位轉型顧問與AI架構師。
                 任務：請根據以下企業情境，撰寫一份專業級的「人機協作導入藍圖」。
@@ -575,43 +572,21 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 1. 語氣必須專業、客觀。
                 2. 必須包含以下四個 H2 章節，並且在對應章節【強制使用】指定的 Markdown Mermaid 語法。
 
-                [Mermaid 語法嚴格規範 (非常重要，避免 Syntax Error)]
+                [Mermaid 語法嚴格規範 (非常重要)]
                 - 第一章：職責光譜劃分
-                  說明：明確定義人類與 AI 的職責。
                   圖表：【強制提供 Mermaid Pie】
                   語法規則：必須使用 \`pie title 標題\`。資料鍵值【必須使用雙引號】，數值為純數字。
-                  範例寫法：
-                  \`\`\`mermaid
-                  pie title 職責分配
-                  "人類" : 40
-                  "AI" : 60
-                  \`\`\`
 
                 - 第二章：協作實施方法
-                  說明：具體的 Workflow 建議。
                   圖表：【強制提供 Mermaid Flowchart】
-                  語法規則：使用 \`graph TD\`。節點名稱不要使用特殊符號。
-                  範例寫法：
-                  \`\`\`mermaid
-                  graph TD
-                  A[開始] --> B[處理]
-                  \`\`\`
+                  語法規則：使用 \`graph TD\`。
 
                 - 第三章：人才賦能與學習路徑
                   說明：員工需要學習什麼新技能。無需圖表。
 
                 - 第四章：執行企劃草案
-                  說明：階段性目標與預期成效。
                   圖表：【強制提供 Mermaid Gantt】
                   語法規則：必須宣告 \`dateFormat YYYY-MM-DD\`。為了避免圖表擠壓，任務時間跨度請設定長一點（如 30d, 45d），並且「任務名稱請盡量精簡」。
-                  範例寫法：
-                  \`\`\`mermaid
-                  gantt
-                  title 導入時程
-                  dateFormat YYYY-MM-DD
-                  section 階段一
-                  系統規劃 :a1, 2024-01-01, 30d
-                  \`\`\`
             `;
 
             try {
@@ -631,8 +606,6 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 `;
 
                 outputDiv.innerHTML = headerInfo + htmlContent;
-                
-                // 渲染 Mermaid 圖表
                 renderMermaidDiagrams(outputDiv);
                 
                 document.getElementById('welcomeScreen').classList.add('hidden');
@@ -654,14 +627,9 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
         }
 
         async function generateRiskAssessment() {
-             if (!state.currentBlueprintRaw) {
-                 showModal('提示', '請先生成主藍圖，才能進行風險評估。');
-                 return;
-             }
+             if (!state.currentBlueprintRaw) { showModal('提示', '請先生成主藍圖。'); return; }
              if (state.currentBlueprintRaw.includes("專案風險戰略分析")) {
-                 showModal('確認重產', '風險評估已存在於文件底部。確定要重新生成並覆蓋嗎？', 'confirm', () => {
-                     doGenerateRiskAssessment();
-                 });
+                 showModal('確認重產', '風險評估已存在。確定要重新生成嗎？', 'confirm', () => { doGenerateRiskAssessment(); });
                  return;
              }
              doGenerateRiskAssessment();
@@ -707,47 +675,135 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                     state.currentBlueprintRaw += "\n\n" + aiText;
                 }
                 
-                setTimeout(() => {
-                     outputDiv.parentElement.scrollTo({ top: outputDiv.scrollHeight, behavior: 'smooth' });
-                }, 100);
+                setTimeout(() => { outputDiv.parentElement.scrollTo({ top: outputDiv.scrollHeight, behavior: 'smooth' }); }, 100);
 
              } catch (e) {
-                 showModal('分析失敗', `風險評估生成失敗。請檢查 API Key 配額或網絡連線。\n錯誤訊息: ${e.message}`, 'error');
+                 showModal('分析失敗', `錯誤訊息: ${e.message}`, 'error');
              } finally {
                  setLoading(false);
              }
         }
 
-        async function generateAudioBriefing() {
-            if (!state.currentBlueprintRaw) {
-                showModal('提示', '請先生成主藍圖，才能產出顧問導讀。');
+        // --- NEW FEATURE: Generate Agent Skill ---
+        async function generateAgentSkill() {
+             if (!state.currentBlueprintRaw) { showModal('提示', '請先生成主藍圖，才能產出對應的 Agent Skill。'); return; }
+             if (state.currentBlueprintRaw.includes("系統提示詞草案")) {
+                 showModal('確認重產', 'Agent Skill 已存在於文件中。確定要重新生成嗎？', 'confirm', () => { doGenerateAgentSkill(); });
+                 return;
+             }
+             doGenerateAgentSkill();
+        }
+
+        async function doGenerateAgentSkill() {
+             setLoading(true, '🛠️ 正在提煉系統設定檔 (System Prompt)...');
+
+             const prompt = `
+                任務：請根據以下「人機協作藍圖」，為其中最核心的一位 AI Agent，撰寫一份實戰可落地的「System Prompt (系統提示詞) / Skill.md」。
+                
+                [嚴格指令]
+                1. 格式：請使用結構化的 Markdown 輸出。
+                2. 結構必須嚴格包含以下順序與標題：
+                   - H2 標題：## 🤖 [請在此填寫Agent功能名稱，例如：智能客服分類助理] Skill.md (系統提示詞草案)
+                   - **自我介紹 (Self-Introduction)**：第一人稱，親切地向使用者介紹自己的功能、擅長領域，以及能為使用者解決什麼問題。
+                   - **開始指引 (How to Start)**：告訴使用者啟動這項技能的具體步驟（例如：「請輸入客訴信件原文，我將開始為您分析...」或給出幾個範例開場白）。
+                   - **Role (角色設定)**：設定該 Agent 的專家身份與人設。
+                   - **Objective (核心目標)**：它的主要任務是什麼。
+                   - **Guidelines (行為準則)**：什麼該做、什麼時候必須將問題轉交給人類專員。
+                   - **Workflow (標準作業程序)**：它處理單一任務的固定思考步驟 (Step 1, 2, 3...)。
+                   - **Output Format (輸出格式要求)**：它應如何回應。
+                3. 語氣：前面介紹需親切引導，後方設定需指令化、精確、適合直接複製貼入 AI 平台作為系統設定檔。
+                
+                藍圖內容參考：
+                ${state.currentBlueprintRaw.substring(0, 3000)}...
+             `;
+
+             try {
+                const response = await callGemini(prompt, 'gemini-3.8-flash');
+                const aiText = response.candidates[0].content.parts[0].text;
+                const outputDiv = document.getElementById('blueprintOutput');
+                
+                const skillHtml = marked.parse(aiText);
+                
+                // 儲存原始內容
+                state.currentSkillMdRaw = aiText;
+
+                // 解析並擷取 Skill 名稱 (從標題中提取)
+                let skillName = "Agent";
+                const titleMatch = aiText.match(/## 🤖 (.*?) Skill\.md/);
+                if (titleMatch && titleMatch[1]) {
+                    // 移除可能被 AI 誤加的括號並去除頭尾空白
+                    skillName = titleMatch[1].replace(/[\[\]]/g, '').trim(); 
+                }
+                state.currentSkillName = skillName;
+
+                const styledSkillHtml = `
+                    <div class="skill-section" id="skillSectionBlock">
+                        ${skillHtml}
+                        <button onclick="downloadSkillMd()" class="mt-6 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded text-sm transition-colors shadow-md flex items-center gap-2 font-sans font-medium">
+                            <i class="fas fa-download"></i> 下載 Skill.md (${skillName})
+                        </button>
+                    </div>
+                `;
+                
+                const existingSkill = document.getElementById('skillSectionBlock');
+                if(existingSkill) existingSkill.remove();
+
+                outputDiv.insertAdjacentHTML('beforeend', styledSkillHtml);
+                
+                if(!state.currentBlueprintRaw.includes("系統提示詞草案")) {
+                    state.currentBlueprintRaw += "\n\n" + aiText;
+                }
+                
+                setTimeout(() => { outputDiv.parentElement.scrollTo({ top: outputDiv.scrollHeight, behavior: 'smooth' }); }, 100);
+
+             } catch (e) {
+                 showModal('生成失敗', `無法產生 Agent Skill。\n錯誤訊息: ${e.message}`, 'error');
+             } finally {
+                 setLoading(false);
+             }
+        }
+
+        function downloadSkillMd() {
+            if (!state.currentSkillMdRaw) {
+                showModal('下載失敗', '找不到 Skill 檔案內容。如果您是載入歷史紀錄，請重新生成。', 'error');
                 return;
             }
+            
+            // 使用動態抓取的技能名稱，並過濾掉不能做為檔名的特殊符號
+            const safeFileName = (state.currentSkillName || 'Agent').replace(/[\\/:*?"<>|]/g, "");
+            
+            const blob = new Blob([state.currentSkillMdRaw], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement("a");
+            
+            downloadLink.href = url;
+            downloadLink.download = `${safeFileName}_Skill.md`;
+            
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+            
+            showModal('下載成功', `「${safeFileName}_Skill.md」已經下載！\n包含完整的自我介紹、開始指引與系統設定，您可以直接匯入 AI 平台使用。`, 'success');
+        }
 
+        async function generateAudioBriefing() {
+            if (!state.currentBlueprintRaw) { showModal('提示', '請先生成主藍圖。'); return; }
             setLoading(true, '🎧 正在提煉高價值的 CEO 電梯簡報 (Elevator Pitch)...');
 
             try {
                 const scriptPrompt = `
-                    任務：請針對這份藍圖，為顧問撰寫一份「45秒 CEO 電梯簡報 (Elevator Pitch)」。
-                    
-                    [嚴格要求]
-                    1. 找出這份藍圖中「最值錢、最能創造競爭優勢」的洞察點。
-                    2. 結構如下 (直接輸出繁體中文講稿)：
-                       - [Hook]：一句話點破盲點。
-                       - [Strategy]：如何利用 AI 解決問題。
-                       - [ROI]：預期帶來的巨大商業價值。
-                    3. 語氣：自信、權威。不要說「你好」或「謝謝」。
-                    
+                    任務：請針對這份藍圖，為顧問撰寫一份「45秒 CEO 電梯簡報」。
+                    結構：[Hook] 點破盲點 -> [Strategy] AI 策略 -> [ROI] 商業價值。
+                    語氣：自信、權威。不要說「你好」或「謝謝」。
                     藍圖內容：${state.currentBlueprintRaw.substring(0, 3000)}
                 `;
                 
-                // 生成文案使用 3.8-flash
                 const scriptResponse = await callGemini(scriptPrompt, 'gemini-3.8-flash');
                 const scriptText = scriptResponse.candidates[0].content.parts[0].text;
                 
                 setLoading(true, '🎧 正在合成 AI 顧問語音 (語音合成)...');
                 
-                // 語音生成 API 使用 2.5-flash-preview-tts (目前唯一支援語音合成的端點)
                 const ttsResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${state.apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -755,11 +811,7 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                         contents: [{ parts: [{ text: scriptText }] }],
                         generationConfig: {
                             responseModalities: ["AUDIO"],
-                            speechConfig: {
-                                voiceConfig: {
-                                    prebuiltVoiceConfig: { voiceName: "Kore" } 
-                                }
-                            }
+                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } }
                         }
                     })
                 });
@@ -797,7 +849,7 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 document.getElementById('audioPlayerContainer').classList.remove('hidden');
 
             } catch (e) {
-                showModal('語音生成失敗', `無法產生顧問導讀音檔，可能遇到 API 限制或模型暫不支援。\n錯誤訊息: ${e.message}`, 'error');
+                showModal('語音生成失敗', `請確保配額足夠。\n錯誤訊息: ${e.message}`, 'error');
             } finally {
                 setLoading(false);
             }
@@ -810,7 +862,6 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
             document.getElementById('audioPlayerContainer').classList.add('hidden');
         }
 
-        // --- Helper: Gemini API Call ---
         async function callGemini(promptText, model = 'gemini-3.8-flash') {
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`, {
                 method: 'POST',
@@ -828,12 +879,8 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
         function setLoading(isLoading, text = '') {
             const loader = document.getElementById('loadingState');
             const txt = document.getElementById('loadingText');
-            if (isLoading) {
-                loader.classList.remove('hidden');
-                txt.textContent = text;
-            } else {
-                loader.classList.add('hidden');
-            }
+            if (isLoading) { loader.classList.remove('hidden'); txt.textContent = text; } 
+            else { loader.classList.add('hidden'); }
         }
 
         function addWavHeader(pcmData, sampleRate = 24000, numChannels = 1) {
@@ -871,13 +918,9 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
             try {
                 const snapshot = await db.collection("blueprints").orderBy("timestamp", "desc").get();
                 state.history = [];
-                snapshot.forEach(doc => {
-                    state.history.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach(doc => { state.history.push({ id: doc.id, ...doc.data() }); });
                 renderHistory();
-            } catch (error) {
-                console.error("Error fetching history:", error);
-            }
+            } catch (error) { console.error("Error fetching history:", error); }
         }
 
         async function saveToFirebase() {
@@ -900,11 +943,8 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 state.history.unshift(newRecord);
                 renderHistory();
                 showModal('儲存成功', `專案「${industry}」藍圖已安全儲存至雲端。`, 'success');
-            } catch (error) {
-                showModal('儲存失敗', `無法儲存至雲端: ${error.message}`, 'error');
-            } finally {
-                setLoading(false);
-            }
+            } catch (error) { showModal('儲存失敗', `無法儲存至雲端: ${error.message}`, 'error');
+            } finally { setLoading(false); }
         }
 
         function renderHistory() {
@@ -935,11 +975,8 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                     await db.collection("blueprints").doc(id).delete();
                     state.history = state.history.filter(h => h.id !== id);
                     renderHistory();
-                } catch (error) {
-                    showModal('刪除失敗', `無法刪除紀錄: ${error.message}`, 'error');
-                } finally {
-                    setLoading(false);
-                }
+                } catch (error) { showModal('刪除失敗', `無法刪除紀錄: ${error.message}`, 'error');
+                } finally { setLoading(false); }
             });
         }
 
@@ -963,23 +1000,16 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
             const blocks = container.querySelectorAll('code.language-mermaid');
             blocks.forEach((block) => {
                 const pre = block.parentElement;
-                
                 const mermaidDiv = document.createElement('div');
                 mermaidDiv.className = 'mermaid flex justify-start md:justify-center bg-white p-6 rounded-xl border border-slate-200 shadow-sm w-full overflow-x-auto my-8';
                 mermaidDiv.textContent = block.textContent;
-                
                 pre.parentNode.replaceChild(mermaidDiv, pre);
             });
             
             try {
-                // 安全渲染，防止例外錯誤
                 const unprocessed = container.querySelectorAll('.mermaid:not([data-processed="true"])');
-                if (unprocessed.length > 0) {
-                    mermaid.init(undefined, unprocessed);
-                }
-            } catch (e) {
-                console.error("Mermaid 渲染警告: ", e);
-            }
+                if (unprocessed.length > 0) mermaid.init(undefined, unprocessed);
+            } catch (e) { console.error("Mermaid 渲染警告: ", e); }
         }
 
         function clearHistory() {
@@ -988,20 +1018,13 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 setLoading(true, '清除雲端資料中...');
                 try {
                     const batch = db.batch();
-                    state.history.forEach(item => {
-                        const docRef = db.collection("blueprints").doc(item.id);
-                        batch.delete(docRef);
-                    });
+                    state.history.forEach(item => { batch.delete(db.collection("blueprints").doc(item.id)); });
                     await batch.commit();
-                    
                     state.history = [];
                     renderHistory();
                     showModal('清除成功', '已清空所有雲端歷史紀錄。', 'success');
-                } catch(error) {
-                    showModal('清除失敗', `清除紀錄發生錯誤: ${error.message}`, 'error');
-                } finally {
-                    setLoading(false);
-                }
+                } catch(error) { showModal('清除失敗', `清除紀錄發生錯誤: ${error.message}`, 'error');
+                } finally { setLoading(false); }
             });
         }
 
@@ -1009,11 +1032,7 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             if (!message) return;
-            
-            if (!state.apiKey) {
-                showModal('需要驗證', '請先輸入 API Key 才能與助理對話。', 'error');
-                return;
-            }
+            if (!state.apiKey) { showModal('需要驗證', '請先輸入 API Key 才能與助理對話。', 'error'); return; }
 
             appendMessage('user', message);
             input.value = '';
@@ -1028,7 +1047,6 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                     </div>
                 </div>
             `;
-            
             const container = document.getElementById('chatMessages');
             container.scrollTop = container.scrollHeight;
             
@@ -1038,9 +1056,7 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: state.chatHistory,
-                        systemInstruction: {
-                            parts: [{ text: "你是 TONY 老師開發的助理顧問 Bot。請以簡短、專業、鼓勵的語氣回答關於人機協作、AI 導入策略的問題。回答盡量控制在 100 字以內。" }]
-                        }
+                        systemInstruction: { parts: [{ text: "你是 TONY 老師開發的助理顧問 Bot。請以簡短、專業、鼓勵的語氣回答關於人機協作、AI 導入策略的問題。回答盡量控制在 100 字以內。" }] }
                     })
                 });
                 const data = await response.json();
@@ -1090,10 +1106,7 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
         }
 
         function exportToWord() {
-            if (!state.currentBlueprintRaw) { 
-                showModal('提示', '目前沒有內容可匯出，請先生成藍圖。'); 
-                return; 
-            }
+            if (!state.currentBlueprintRaw) { showModal('提示', '目前沒有內容可匯出，請先生成藍圖。'); return; }
             const content = document.getElementById('blueprintOutput').innerHTML;
             const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
             <head><meta charset='utf-8'><title>人機協作藍圖</title>
@@ -1109,29 +1122,22 @@ Gemini 3.8 模型在訓練階段，閱讀了全球數以萬計的商業案例、
                 th { background-color: #f8f9fa; font-weight: bold; text-align: left; }
                 hr { border: 0; border-top: 2px dashed #94a3b8; margin: 30px 0; }
                 .risk-section { background-color: #fff1f2; border: 1px solid #fda4af; padding: 15px; margin-top: 20px; }
+                .skill-section { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 15px; margin-top: 20px; }
             </style>
             </head><body>`;
             
             const postHtml = "</body></html>";
             const html = preHtml + content + postHtml;
 
-            const blob = new Blob(['\ufeff', html], {
-                type: 'application/msword'
-            });
-            
+            const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
             const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
             const downloadLink = document.createElement("a");
             document.body.appendChild(downloadLink);
             
             const fileName = `人機協作藍圖_${document.getElementById('industry').value || '企劃'}.doc`;
 
-            if(navigator.msSaveOrOpenBlob ){
-                navigator.msSaveOrOpenBlob(blob, fileName);
-            } else {
-                downloadLink.href = url;
-                downloadLink.download = fileName;
-                downloadLink.click();
-            }
+            if(navigator.msSaveOrOpenBlob ){ navigator.msSaveOrOpenBlob(blob, fileName); } 
+            else { downloadLink.href = url; downloadLink.download = fileName; downloadLink.click(); }
             document.body.removeChild(downloadLink);
         }
     </script>
